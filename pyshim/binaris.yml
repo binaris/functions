@@ -1,0 +1,4 @@
+functions:
+  pyshim:
+    file: pyshim.js
+    entrypoint: handler
