@@ -57,3 +57,6 @@ typings/
 # dotenv environment variables file
 .env
 
+*.sw[nop]
+
+package-lock.json
