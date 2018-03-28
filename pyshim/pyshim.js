@@ -38,31 +38,17 @@ const startBgProcess = () => {
 
 startBgProcess();
 
-const asyncHandler = async (event) => {
-  console.log('Async handler event object', JSON.stringify(event));
+exports.handler = async (body, request) => {
+  console.log('Async handler request object', JSON.stringify(request));
   console.log('Async handler: forwarding request to background process');
 
   try {
-    const url = new URL(event.path || '/', 'http://localhost:8000');
+    const url = new URL(request.path || '/', 'http://localhost:8000');
     const responseBody = await rp.get(url.toString());
     console.log('Async handler: background process responded with: ', responseBody);
     return responseBody;
   } catch (err) {
     console.error('Async handler: background process error', err.message);
     throw err;
-  }
-};
-
-exports.handler = (event, context, callback) => {
-  try {
-    asyncHandler(event, context).then((data) => {
-      callback(null, { statusCode: 200, body: data });
-    }, (err) => {
-      console.error(err);
-      callback(null, { statusCode: 500, body: err.message });
-    });
-  } catch (err) {
-    console.error(err);
-    callback(null, { statusCode: 500, body: err.message });
   }
 };
